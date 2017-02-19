@@ -1,0 +1,14 @@
+{
+    "name": "rogierkn/nuntius",
+    "description": "A blogging package for Laravel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rogier Knoester",
+            "email": "knoesterrogier@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
