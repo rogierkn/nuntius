@@ -1,5 +1,4 @@
-![Build status develop branch](https://travis-ci.org/rogierkn/nuntius.svg?branch=develop "Build status develop branch")
-
+[![Build Status](https://travis-ci.org/rogierkn/nuntius.svg?branch=develop)](https://travis-ci.org/rogierkn/nuntius)
 ## Installation
 
 **Register service provider**  
