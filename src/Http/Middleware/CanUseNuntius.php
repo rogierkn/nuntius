@@ -3,23 +3,30 @@
 namespace Nuntius\Http\Middleware;
 
 use Closure;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Contracts\Auth\Access\Gate;
+
 
 class CanUseNuntius
 {
+    private $gate;
+
+    public function __construct(Gate $gate)
+    {
+        $this->gate = $gate;
+    }
+
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
      * @return mixed
-     * @throws AuthorizationException
+     * @throws \Nuntius\Exceptions\AuthorizationException
      */
     public function handle($request, Closure $next)
     {
-        if(Gate::denies(config('nuntius.gate'))) {
-            throw new AuthorizationException("You do not have sufficient permissions to access this page");
+        if($this->gate->denies(config('nuntius.gate'))) {
+            throw new \Nuntius\Exceptions\AuthorizationException("You do not have sufficient permissions to access this page");
         }
 
         return $next($request);

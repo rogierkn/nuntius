@@ -2,7 +2,10 @@
 
 namespace Nuntius\Http\Controllers;
 
-class CreateBlogController
+
+use App\Http\Controllers\Controller;
+
+class CreateBlogController extends Controller
 {
     public function createFormAction()
     {
