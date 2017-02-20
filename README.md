@@ -1,3 +1,5 @@
+![Build status develop branch](https://travis-ci.org/rogierkn/nuntius.svg?branch=develop "Build status develop branch")
+
 ## Installation
 
 **Register service provider**  
@@ -8,8 +10,8 @@ Add ``'canUseNuntius' => \Nuntius\Http\Middleware\CanUseNuntius::class`` to the 
 
 **Register the gate to check if User can use Nuntius**  
 Create a gate in the ``boot()`` method in your app's ``app/Providers/AuthServiceProvider`` and define your way of checking if a User is authorized.
-````php
+```php
 Gate::define(config('nuntius.gate'), function($user) {
     return $user->isAdmin();
 });
-````
+```
