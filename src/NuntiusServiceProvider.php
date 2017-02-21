@@ -3,6 +3,9 @@
 namespace Nuntius;
 
 use Illuminate\Support\ServiceProvider;
+use Nuntius\Exceptions\NotImplementedException;
+use Nuntius\Interfaces\BlogAuthorization;
+use ReflectionClass;
 
 class NuntiusServiceProvider extends ServiceProvider
 {
@@ -22,6 +25,7 @@ class NuntiusServiceProvider extends ServiceProvider
 
         $this->publishes([__DIR__.'/resources/assets' => public_path('vendor/nuntius')], 'public');
 
+        $this->runBootTests();
     }
 
     /**
@@ -32,5 +36,20 @@ class NuntiusServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    public function runBootTests()
+    {
+        if (!$this->modelImplementsAuthInterface()) {
+            throw new NotImplementedException("The configured model " . config('nuntius.model.className') . " does not implement the Nuntius\\Interfaces\\BlogAuthorization interface");
+        }
+    }
+
+    private function modelImplementsAuthInterface(): bool
+    {
+        $className = config('nuntius.model.className');
+        $reflectionClass = new ReflectionClass($className);
+
+        return $reflectionClass->implementsInterface(BlogAuthorization::class);
     }
 }
