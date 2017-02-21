@@ -3,6 +3,7 @@
 namespace Nuntius\Tests;
 
 use Nuntius\NuntiusServiceProvider;
+use Nuntius\Tests\Models\User;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -19,6 +20,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'database' => ':memory:',
             'prefix' => ''
         ]);
+        $app['config']->set('nuntius.model.className', User::class);
     }
 
 }
