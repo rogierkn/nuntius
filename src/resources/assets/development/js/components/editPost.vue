@@ -3,7 +3,17 @@
         <loading-text v-if="showLoadingText"></loading-text>
         <div v-else class="columns">
             <div class="column is-two-thirds">
-                <h2 class="title is-3">New post</h2>
+                <div class="level">
+                    <div class="level-left">
+                        <h2 class="title is-3 level-item">New post</h2>
+                    </div>
+                    <div class="level-right">
+                        <p class="level-item">
+                            last updated&nbsp;
+                            <timeago :since="post.updated_at" :auto-update="30" v-if="!!post"></timeago>
+                        </p>
+                    </div>
+                </div>
                 <div class="level">
                     <span>Title&nbsp;</span>
                     <input type="text" v-model="post.title" class="input">
@@ -16,8 +26,6 @@
             <div class="column">
                 <h2 class="title is-4">Actions</h2>
                 <saveButton :post="post" v-on:saved="onSaved"></saveButton>
-                <timeago :since="post.updated_at" :auto-update="30" v-if="!!post"></timeago>
-                {{post.updated_at}}
             </div>
         </div>
     </div>
@@ -28,8 +36,8 @@
         props: ['id'],
 
         mounted() {
-            this.$http.get('post/'+this.id).then(response => {
-                if(response.body.status === 'ok') {
+            this.$http.get('post/' + this.id).then(response => {
+                if (response.body.status === 'ok') {
                     this.post = response.body.post
                 }
                 this.showLoadingText = false;

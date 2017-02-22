@@ -5,7 +5,7 @@
         <div class="columns">
             <div class="column is-two-thirds">
                 <loading-text v-if="showLoadingText"></loading-text>
-                <table v-else>
+                <table v-else class="table">
                     <thead>
                     <tr>
                         <th>Title</th>
