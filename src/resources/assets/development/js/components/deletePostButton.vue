@@ -63,10 +63,12 @@
                             this.isLoading = false;
                             this.postDeleted = true;
                             this.deleteButtonText = 'Deleted';
+                            this.modalContentText = "Post has been deleted, redirecting to home...";
+
 
                             setTimeout(() => {
                                 this.$emit('postDeleted', this.post);
-                            }, 1000);
+                            }, 1500);
 
                         }
                     },

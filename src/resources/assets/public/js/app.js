@@ -466,10 +466,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.post = post;
         },
         onPostDeleted: function onPostDeleted(post) {
-            this.$router.push('home');
+            this.$router.push({ name: 'home' });
         }
     }
-
 };
 
 /***/ }),
@@ -13827,10 +13826,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     _this.isLoading = false;
                     _this.postDeleted = true;
                     _this.deleteButtonText = 'Deleted';
+                    _this.modalContentText = "Post has been deleted, redirecting to home...";
 
                     setTimeout(function () {
-                        _this.$emit('postDeleted', _this.post.id);
-                    }, 1000);
+                        _this.$emit('postDeleted', _this.post);
+                    }, 1500);
                 }
             }, function (response) {
                 _this.isLoading = false;

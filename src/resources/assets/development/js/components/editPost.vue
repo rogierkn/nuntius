@@ -66,7 +66,7 @@
             },
 
             onPostDeleted(post) {
-                this.$router.push('home');
+                this.$router.push({name:'home'});
             }
         }
     }
