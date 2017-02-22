@@ -33,7 +33,9 @@ class NuntiusServiceProvider extends ServiceProvider
         $this->publishes([__DIR__ . '/resources/assets/public' => public_path('vendor/nuntius')], 'public');
 
 
-        $this->runBootTests();
+        if(!App::runningInConsole()) {
+            $this->runBootTests();
+        }
         // Give the root URL to all views
         View::share('nuntius_root_url', '/nuntius/api');
     }
