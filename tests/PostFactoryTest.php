@@ -3,7 +3,7 @@
 
 namespace Nuntius\Tests;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Nuntius\Factories\PostFactory;
 use Nuntius\Tests\Models\User;
 
@@ -27,6 +27,8 @@ class PostFactoryTest extends TestCase
         $postFactory = new PostFactory($dispatcherMock);
         $postFactory->createPost(['user_id' => $this->user->id, 'title' => 'Test Blog title', 'body' => 'Blog body']);
 
-        $this->assertDatabaseHas('nuntius_posts', ['title' => 'Test Blog title']);
+        $postFromDb = DB::table('nuntius_posts')->first();
+
+        $this->assertEquals($postFromDb->title, 'Test Blog title');
     }
 }
