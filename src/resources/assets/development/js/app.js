@@ -26,6 +26,7 @@ const router = new VueRouter({routes});
 // Load components
 Vue.component('createPostButton', require('./components/createPostButton.vue'));
 Vue.component('saveButton', require('./components/saveButton.vue'));
+Vue.component('deletePostButton', require('./components/deletePostButton.vue'));
 
 Vue.component('publishToggleButton', require('./components/publishToggleButton.vue'));
 Vue.component('loadingText', require('./components/loadingText.vue'));

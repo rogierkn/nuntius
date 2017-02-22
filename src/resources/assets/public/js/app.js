@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 26);
+/******/ 	return __webpack_require__(__webpack_require__.s = 29);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -311,13 +311,13 @@ process.umask = function() { return 0; };
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_resource__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_resource__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_resource___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_resource__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_timeago__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_timeago__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_timeago___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_timeago__);
 
 
@@ -327,21 +327,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router___default.a);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_resource___default.a);
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_vue_timeago___default.a, { locale: 'en-US', locales: { 'en-US': __webpack_require__(22) } });
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_vue_timeago___default.a, { locale: 'en-US', locales: { 'en-US': __webpack_require__(25) } });
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.headers.common['X-CSRF-TOKEN'] = window.csrf;
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.options.root = window.nuntius_root_url;
 
-var routes = [{ path: '/home', name: 'home', component: __webpack_require__(11) }, { path: '/post/edit/:id', name: 'postEdit', component: __webpack_require__(10), props: true }];
+var routes = [{ path: '/home', name: 'home', component: __webpack_require__(12) }, { path: '/post/edit/:id', name: 'postEdit', component: __webpack_require__(11), props: true }];
 
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router___default.a({ routes: routes });
 
 // Load components
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('createPostButton', __webpack_require__(9));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('saveButton', __webpack_require__(13));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('createPostButton', __webpack_require__(10));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('saveButton', __webpack_require__(15));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('deletePostButton', __webpack_require__(34));
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('publishToggleButton', __webpack_require__(31));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('loadingText', __webpack_require__(12));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('publishToggleButton', __webpack_require__(14));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('loadingText', __webpack_require__(13));
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     router: router,
@@ -431,6 +432,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = {
     props: ['id'],
@@ -462,9 +464,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         onPublishToggled: function onPublishToggled(post) {
             this.post = post;
+        },
+        onPostDeleted: function onPostDeleted(post) {
+            this.$router.push({ name: 'home' });
         }
     }
-
 };
 
 /***/ }),
@@ -604,6 +608,61 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['post'],
     data: function data() {
         return {
+            publishToggled: false,
+            isLoading: false
+        };
+    },
+
+    methods: {
+        publishToggle: function publishToggle() {
+            var _this = this;
+
+            this.isLoading = true;
+
+            this.$http.put('post/' + this.post.id + '/published/toggle', this.post).then(function (response) {
+                if (response.body.status === 'ok') {
+
+                    _this.isLoading = false;
+                    _this.publishToggled = true;
+
+                    setTimeout(function () {
+                        _this.publishToggled = false;
+                    }, 2000);
+
+                    _this.$emit('publishToggled', response.body.post);
+                }
+            }, function (response) {
+                _this.isLoading = false;
+
+                console.log(response);
+            });
+        }
+    },
+
+    computed: {
+        buttonText: function buttonText() {
+            return this.post.published ? 'Unpublish' : 'Publish';
+        }
+    }
+};
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = {
+    props: ['post'],
+    data: function data() {
+        return {
             buttonText: 'Save',
             saved: false,
             isLoading: false
@@ -638,14 +697,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 };
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(4),
   /* template */
-  __webpack_require__(16),
+  __webpack_require__(19),
   /* scopeId */
   null,
   /* cssModules */
@@ -672,14 +731,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(5),
   /* template */
-  __webpack_require__(17),
+  __webpack_require__(20),
   /* scopeId */
   null,
   /* cssModules */
@@ -706,14 +765,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(6),
   /* template */
-  __webpack_require__(15),
+  __webpack_require__(17),
   /* scopeId */
   null,
   /* cssModules */
@@ -740,14 +799,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(7),
   /* template */
-  __webpack_require__(18),
+  __webpack_require__(21),
   /* scopeId */
   null,
   /* cssModules */
@@ -774,14 +833,48 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(8),
   /* template */
-  __webpack_require__(14),
+  __webpack_require__(18),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Rogier\\Development\\nuntius-laravel\\packages\\nuntius\\src\\resources\\assets\\development\\js\\components\\publishToggleButton.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] publishToggleButton.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-51c0d19a", Component.options)
+  } else {
+    hotAPI.reload("data-v-51c0d19a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(9),
+  /* template */
+  __webpack_require__(16),
   /* scopeId */
   null,
   /* cssModules */
@@ -808,7 +901,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -831,7 +924,7 @@ if (false) {
 }
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -877,7 +970,30 @@ if (false) {
 }
 
 /***/ }),
-/* 16 */
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('button', {
+    staticClass: "button fadeTransition",
+    class: {
+      'is-success': _vm.publishToggled, 'is-loading': _vm.isLoading
+    },
+    on: {
+      "click": _vm.publishToggle
+    }
+  }, [_vm._v("\n    " + _vm._s(_vm.buttonText) + "\n")])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-51c0d19a", module.exports)
+  }
+}
+
+/***/ }),
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -900,7 +1016,7 @@ if (false) {
 }
 
 /***/ }),
-/* 17 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -980,6 +1096,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "publishToggled": _vm.onPublishToggled
     }
+  }), _vm._v(" "), _c('deletePostButton', {
+    attrs: {
+      "post": _vm.post
+    },
+    on: {
+      "postDeleted": _vm.onPostDeleted
+    }
   })], 1)])], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
@@ -991,7 +1114,7 @@ if (false) {
 }
 
 /***/ }),
-/* 18 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -1010,7 +1133,7 @@ if (false) {
 }
 
 /***/ }),
-/* 19 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2088,7 +2211,7 @@ var xhrClient = function (request) {
 
 var nodeClient = function (request) {
 
-    var client = __webpack_require__(25);
+    var client = __webpack_require__(28);
 
     return new PromiseObj(function (resolve) {
 
@@ -2542,7 +2665,7 @@ module.exports = plugin;
 
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4828,7 +4951,7 @@ module.exports = VueRouter;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 21 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
@@ -4976,7 +5099,7 @@ return install;
 
 
 /***/ }),
-/* 22 */
+/* 25 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -5012,7 +5135,7 @@ module.exports = [
 ];
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13585,10 +13708,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(24)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(27)))
 
 /***/ }),
-/* 24 */
+/* 27 */
 /***/ (function(module, exports) {
 
 var g;
@@ -13615,13 +13738,13 @@ module.exports = g;
 
 
 /***/ }),
-/* 25 */
+/* 28 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 26 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(2);
@@ -13629,14 +13752,39 @@ module.exports = __webpack_require__(3);
 
 
 /***/ }),
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -13648,61 +13796,68 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['post'],
     data: function data() {
         return {
-            publishToggled: false,
-            isLoading: false
+            showModal: false,
+            isLoading: false,
+            canClose: true,
+            postDeleted: false,
+            deleteButtonText: 'Delete',
+            modalContentText: "Are you sure you want to delete this post?"
         };
     },
 
     methods: {
-        publishToggle: function publishToggle() {
+        openModal: function openModal() {
+            this.showModal = true;
+            this.modalContentText = "Are you sure you want to delete this post?";
+        },
+        closeModal: function closeModal() {
+            if (!this.canClose) return;
+            this.showModal = false;
+        },
+        deletePost: function deletePost() {
             var _this = this;
 
             this.isLoading = true;
+            this.canClose = false;
 
-            this.$http.put('post/' + this.post.id + '/published/toggle', this.post).then(function (response) {
+            this.$http.delete('post/' + this.post.id).then(function (response) {
                 if (response.body.status === 'ok') {
 
                     _this.isLoading = false;
-                    _this.publishToggled = true;
+                    _this.postDeleted = true;
+                    _this.deleteButtonText = 'Deleted';
+                    _this.modalContentText = "Post has been deleted, redirecting to home...";
 
                     setTimeout(function () {
-                        _this.publishToggled = false;
-                    }, 2000);
-
-                    _this.$emit('publishToggled', response.body.post);
+                        _this.$emit('postDeleted', _this.post);
+                    }, 1500);
                 }
             }, function (response) {
                 _this.isLoading = false;
-
+                _this.canClose = true;
                 console.log(response);
             });
-        }
-    },
-
-    computed: {
-        buttonText: function buttonText() {
-            return this.post.published ? 'Unpublish' : 'Publish';
         }
     }
 };
 
 /***/ }),
-/* 31 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(30),
+  __webpack_require__(33),
   /* template */
-  __webpack_require__(32),
+  __webpack_require__(35),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Rogier\\Development\\nuntius-laravel\\packages\\nuntius\\src\\resources\\assets\\development\\js\\components\\publishToggleButton.vue"
+Component.options.__file = "C:\\Users\\Rogier\\Development\\nuntius-laravel\\packages\\nuntius\\src\\resources\\assets\\development\\js\\components\\deletePostButton.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] publishToggleButton.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] deletePostButton.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -13711,9 +13866,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-51c0d19a", Component.options)
+    hotAPI.createRecord("data-v-d3097ff0", Component.options)
   } else {
-    hotAPI.reload("data-v-51c0d19a", Component.options)
+    hotAPI.reload("data-v-d3097ff0", Component.options)
   }
 })()}
 
@@ -13721,25 +13876,89 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('button', {
+  return _c('span', [_c('button', {
     staticClass: "button fadeTransition",
     class: {
-      'is-success': _vm.publishToggled, 'is-loading': _vm.isLoading
+      'is-loading': _vm.isLoading
     },
     on: {
-      "click": _vm.publishToggle
+      "click": _vm.openModal
     }
-  }, [_vm._v("\n    " + _vm._s(_vm.buttonText) + "\n")])
+  }, [_vm._v("\n        Delete\n    ")]), _vm._v(" "), _c('div', {
+    staticClass: "fadeTransition modal",
+    class: {
+      'is-active': _vm.showModal
+    }
+  }, [_c('div', {
+    staticClass: "modal-background",
+    on: {
+      "click": _vm.closeModal
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "modal-card"
+  }, [_c('header', {
+    staticClass: "modal-card-head"
+  }, [_c('p', {
+    staticClass: "modal-card-title"
+  }, [_vm._v("Delete post confirmation")]), _vm._v(" "), _c('button', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.canClose),
+      expression: "canClose"
+    }],
+    staticClass: "delete",
+    class: {
+      'is-disabled': !_vm.canClose
+    },
+    on: {
+      "click": _vm.closeModal
+    }
+  })]), _vm._v(" "), _c('section', {
+    staticClass: "modal-card-body"
+  }, [_vm._v("\n                " + _vm._s(_vm.modalContentText) + "\n            ")]), _vm._v(" "), _c('footer', {
+    staticClass: "modal-card-foot"
+  }, [_c('a', {
+    staticClass: "button is-danger",
+    class: {
+      'is-loading': _vm.isLoading, 'is-disabled': _vm.postDeleted
+    },
+    on: {
+      "click": _vm.deletePost
+    }
+  }, [_vm._v(_vm._s(_vm.deleteButtonText))]), _vm._v(" "), _c('a', {
+    staticClass: "button fadeTransition",
+    class: {
+      'is-disabled': !_vm.canClose
+    },
+    on: {
+      "click": _vm.closeModal
+    }
+  }, [_vm._v("Cancel")])])]), _vm._v(" "), _c('button', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.canClose),
+      expression: "canClose"
+    }],
+    staticClass: "modal-close",
+    class: {
+      'is-disabled': !_vm.canClose
+    },
+    on: {
+      "click": _vm.closeModal
+    }
+  })])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-51c0d19a", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-d3097ff0", module.exports)
   }
 }
 
