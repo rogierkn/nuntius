@@ -15,6 +15,10 @@ class Post extends Model
 
     protected $appends = ['author'];
 
+    protected $casts = [
+        'published' => 'boolean'
+    ];
+
     public function user() {
         return $this->belongsTo(config('nuntius.model.className'));
     }
@@ -24,5 +28,9 @@ class Post extends Model
         return $this->user->name;
     }
 
+    public function togglePublished()
+    {
+        $this->published = !$this->published;
+    }
 
 }
