@@ -27,6 +27,7 @@
                 <h2 class="title is-4">Actions</h2>
                 <saveButton :post="post" v-on:saved="onSaved"></saveButton>
                 <publishToggleButton :post="post" v-on:publishToggled="onPublishToggled"></publishToggleButton>
+                <deletePostButton :post="post" v-on:postDeleted="onPostDeleted"></deletePostButton>
             </div>
         </div>
     </div>
@@ -62,9 +63,11 @@
 
             onPublishToggled(post) {
                 this.post = post;
+            },
+
+            onPostDeleted(post) {
+                this.$router.push('home');
             }
-        },
-
-
+        }
     }
 </script>
