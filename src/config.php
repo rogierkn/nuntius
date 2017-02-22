@@ -3,5 +3,9 @@
 return [
     "slug" => "blog",
     "gate" => "use-nuntius",
-    "model" => App\User::class
+    "model" => [
+        "className" => App\User::class,
+        "identifier" => "id"
+    ],
+
 ];

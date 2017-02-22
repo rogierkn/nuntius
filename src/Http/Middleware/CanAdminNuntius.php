@@ -1,19 +1,16 @@
 <?php
 
+
 namespace Nuntius\Http\Middleware;
 
+
 use Closure;
-use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Support\Facades\Auth;
 
-
-class CanUseNuntius
+class CanAdminNuntius
 {
-    private $gate;
 
-    public function __construct(Gate $gate)
-    {
-        $this->gate = $gate;
-    }
+
 
     /**
      * Handle an incoming request.
@@ -25,8 +22,8 @@ class CanUseNuntius
      */
     public function handle($request, Closure $next)
     {
-        if($this->gate->denies(config('nuntius.gate'))) {
-            throw new \Nuntius\Exceptions\AuthorizationException("You do not have sufficient permissions to access this page");
+        if(!Auth::user()->canAdminNuntius()) {
+            throw new \Nuntius\Exceptions\AuthorizationException("You do not have permission to administrate the blog");
         }
 
         return $next($request);
