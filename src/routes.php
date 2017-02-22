@@ -20,6 +20,7 @@ Route::group(['prefix' => 'nuntius/api', 'namespace' => 'Nuntius\Http\Controller
     // Admin side of Nuntius
     Route::group([], function () {
         Route::post('post/create', 'Post\CreateController@create');
+        Route::delete('post/{post}', 'Post\DeleteController@delete');
 
         Route::get('posts', 'Post\GetController@all');
         Route::get('post/{post}', 'Post\GetController@one');
