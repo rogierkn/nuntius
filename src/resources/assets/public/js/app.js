@@ -13648,7 +13648,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['post'],
     data: function data() {
         return {
-            buttonText: 'Publish',
             publishToggled: false,
             isLoading: false
         };
@@ -13677,6 +13676,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 console.log(response);
             });
+        }
+    },
+
+    computed: {
+        buttonText: function buttonText() {
+            return this.post.published ? 'Unpublish' : 'Publish';
         }
     }
 };

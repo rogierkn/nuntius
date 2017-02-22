@@ -9,7 +9,6 @@
         props: ['post'],
         data() {
             return {
-                buttonText: 'Publish',
                 publishToggled: false,
                 isLoading: false
             };
@@ -41,6 +40,12 @@
                     }
                 );
 
+            }
+        },
+
+        computed: {
+            buttonText() {
+                return this.post.published ? 'Unpublish' : 'Publish';
             }
         }
     }
