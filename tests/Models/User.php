@@ -5,27 +5,17 @@ namespace Nuntius\Tests\Models;
 
 
 use Nuntius\Interfaces\BlogAuthorization;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User implements BlogAuthorization
+
+class User extends Authenticatable implements BlogAuthorization
 {
+    protected $fillable = [
+        'name', 'email', 'password',
+    ];
 
-    public function canCreateNuntiusPost(): bool
+    public function canAdminNuntius(): bool
     {
-        // TODO: Implement canCreateNuntiusPost() method.
-    }
-
-    public function canEditNuntiusPost(): bool
-    {
-        // TODO: Implement canEditNuntiusPost() method.
-    }
-
-    public function canViewNuntiusPost(): bool
-    {
-        // TODO: Implement canViewNuntiusPost() method.
-    }
-
-    public function canCommentOnNuntiusPost(): bool
-    {
-        // TODO: Implement canCommentOnNuntiusPost() method.
+        return true;
     }
 }

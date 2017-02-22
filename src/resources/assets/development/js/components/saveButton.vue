@@ -1,12 +1,12 @@
 <template>
-    <button v-on:click="save" class="button fadeTransition" :class="{'is-success':saved, 'is-loading':isLoading, 'is-disabled':!isPostDirty }">
+    <button v-on:click="save" class="button fadeTransition" :class="{'is-success':saved, 'is-loading':isLoading }">
         {{ buttonText }}
     </button>
 </template>
 
 <script>
     export default {
-        props: ['post', 'isPostDirty'],
+        props: ['post'],
         data() {
             return {
                 buttonText: 'Save',
@@ -19,7 +19,7 @@
 
                 this.isLoading = true;
 
-                this.$http.post('post/create', this.post).then(
+                this.$http.put('post/' + this.post.id, this.post).then(
                     response => {
                         if (response.body.status === 'ok') {
 
@@ -32,7 +32,7 @@
                                 this.saved = false;
                             }, 2000);
 
-                            this.$emit('saved')
+                            this.$emit('saved', response.body.post)
 
                         }
                     },
@@ -41,8 +41,6 @@
                     }
                 );
 
-
-//                this.$emit('save', {data: 'some event data'});
             }
         }
     }

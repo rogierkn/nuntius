@@ -2,11 +2,11 @@
 
 
 
-Route::group(['prefix' => config('nuntius.slug'), 'namespace' => 'Nuntius\Http\Controllers', 'middleware' => ['web']], function () {
+Route::group(['prefix' => config('nuntius.slug'), 'namespace' => 'Nuntius\Http\Controllers', 'middleware' => ['web', 'auth']], function () {
 
 
     // Admin side of Nuntius
-    Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['canUseNuntius']], function () {
+    Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => [\Nuntius\Http\Middleware\CanAdminNuntius::class]], function () {
         Route::get('{route?}', 'AdminController@main')->where(['subs' => '.*']);
     });
 
@@ -15,13 +15,15 @@ Route::group(['prefix' => config('nuntius.slug'), 'namespace' => 'Nuntius\Http\C
 
 
 // Api routes
-Route::group(['prefix' => 'nuntius/api', 'namespace' => 'Nuntius\Http\Controllers\Api', 'middleware' => ['web']], function () {
+Route::group(['prefix' => 'nuntius/api', 'namespace' => 'Nuntius\Http\Controllers\Api', 'middleware' => ['web', \Nuntius\Http\Middleware\CanAdminNuntius::class]], function () {
 
     // Admin side of Nuntius
-    Route::group(['middleware' => ['canUseNuntius']], function () {
-        Route::post('post/create', 'CreatePostController@create');
+    Route::group([], function () {
+        Route::post('post/create', 'Post\CreateController@create');
 
-        Route::get('posts', 'GetPostController@all');
+        Route::get('posts', 'Post\GetController@all');
+        Route::get('post/{post}', 'Post\GetController@one');
+        Route::put('post/{post}', 'Post\SaveController@save');
     });
 
 });

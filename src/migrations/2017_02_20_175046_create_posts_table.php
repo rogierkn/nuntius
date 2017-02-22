@@ -26,7 +26,11 @@ class CreatePostsTable extends Migration
 
             $className = config('nuntius.model.className');
 
-            $table->foreign('user_id')->references(config('nuntius.model.identifier'))->on((new $className)->getTable());
+            $tableName = (new $className)->getTable();
+            $id = config('nuntius.model.identifier');
+
+
+            $table->foreign('user_id')->references($id)->on($tableName);
         });
     }
 

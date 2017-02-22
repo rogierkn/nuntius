@@ -19,6 +19,13 @@ html, body {
   margin-top:50px;
 }
 
+.loadingText {
+  height:200px;
+}
+
 .fadeTransition {
   transition: all 1s;
+}
+.refresh {
+  cursor:pointer;
 }
