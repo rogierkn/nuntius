@@ -337,8 +337,10 @@ var routes = [{ path: '/home', name: 'home', component: __webpack_require__(11) 
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router___default.a({ routes: routes });
 
 // Load components
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('saveButton', __webpack_require__(13));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('createPostButton', __webpack_require__(9));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('saveButton', __webpack_require__(13));
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('publishToggleButton', __webpack_require__(31));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('loadingText', __webpack_require__(12));
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
@@ -428,6 +430,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = {
     props: ['id'],
@@ -455,6 +458,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         onSaved: function onSaved(post) {
+            this.post = post;
+        },
+        onPublishToggled: function onPublishToggled(post) {
             this.post = post;
         }
     }
@@ -966,6 +972,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     on: {
       "saved": _vm.onSaved
+    }
+  }), _vm._v(" "), _c('publishToggleButton', {
+    attrs: {
+      "post": _vm.post
+    },
+    on: {
+      "publishToggled": _vm.onPublishToggled
     }
   })], 1)])], 1)
 },staticRenderFns: []}
@@ -13614,6 +13627,116 @@ module.exports = g;
 __webpack_require__(2);
 module.exports = __webpack_require__(3);
 
+
+/***/ }),
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = {
+    props: ['post'],
+    data: function data() {
+        return {
+            buttonText: 'Publish',
+            publishToggled: false,
+            isLoading: false
+        };
+    },
+
+    methods: {
+        publishToggle: function publishToggle() {
+            var _this = this;
+
+            this.isLoading = true;
+
+            this.$http.put('post/' + this.post.id + '/published/toggle', this.post).then(function (response) {
+                if (response.body.status === 'ok') {
+
+                    _this.isLoading = false;
+                    _this.publishToggled = true;
+
+                    setTimeout(function () {
+                        _this.publishToggled = false;
+                    }, 2000);
+
+                    _this.$emit('publishToggled', response.body.post);
+                }
+            }, function (response) {
+                _this.isLoading = false;
+
+                console.log(response);
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(30),
+  /* template */
+  __webpack_require__(32),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\Rogier\\Development\\nuntius-laravel\\packages\\nuntius\\src\\resources\\assets\\development\\js\\components\\publishToggleButton.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] publishToggleButton.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-51c0d19a", Component.options)
+  } else {
+    hotAPI.reload("data-v-51c0d19a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('button', {
+    staticClass: "button fadeTransition",
+    class: {
+      'is-success': _vm.publishToggled, 'is-loading': _vm.isLoading
+    },
+    on: {
+      "click": _vm.publishToggle
+    }
+  }, [_vm._v("\n    " + _vm._s(_vm.buttonText) + "\n")])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-51c0d19a", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

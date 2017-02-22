@@ -26,6 +26,7 @@
             <div class="column">
                 <h2 class="title is-4">Actions</h2>
                 <saveButton :post="post" v-on:saved="onSaved"></saveButton>
+                <publishToggleButton :post="post" v-on:publishToggled="onPublishToggled"></publishToggleButton>
             </div>
         </div>
     </div>
@@ -56,6 +57,10 @@
 
         methods: {
             onSaved(post) {
+                this.post = post;
+            },
+
+            onPublishToggled(post) {
                 this.post = post;
             }
         },
