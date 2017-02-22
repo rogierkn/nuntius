@@ -24,6 +24,8 @@ Route::group(['prefix' => 'nuntius/api', 'namespace' => 'Nuntius\Http\Controller
         Route::get('posts', 'Post\GetController@all');
         Route::get('post/{post}', 'Post\GetController@one');
         Route::put('post/{post}', 'Post\SaveController@save');
+
+        Route::put('post/{post}/published/toggle', 'Post\PublishedController@toggle');
     });
 
 });

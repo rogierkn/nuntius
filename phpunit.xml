@@ -4,4 +4,8 @@
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
+
+    <php>
+        <env name="APP_KEY" value="71dedc47f69e66164f7a32da27b7a660"/>
+    </php>
 </phpunit>
